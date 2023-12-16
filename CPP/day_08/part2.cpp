@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <unordered_map>
+#include <numeric>
 
 using namespace std;
 
@@ -18,6 +19,10 @@ bool check_end(vector<string> nodes) {
     return end;
 }
 
+constexpr auto lcm(auto x, auto... xs)
+{
+    return ((x = std::lcm(x, xs)), ...);
+}
 
 int main() {
 
@@ -56,6 +61,8 @@ int main() {
     int i = 0;
     vector<string> curr = starting_nodes;
 
+    vector<int64_t> first_z;
+
     while(!check_end(curr)) {
         switch (instructions[i%instructions.size()])
         {
@@ -75,14 +82,14 @@ int main() {
 
         for (int j = 0 ; j < curr.size(); j++) {
             if (curr[j].ends_with('Z')) {
-                cout << j << " " << curr[j] << " " << i << endl;
+                first_z.push_back(i);
                 break;
             }
         }
-        if (i > 100000) break;
+        if (first_z.size() == 6) break;
     }
 
-    cout << i << endl;
+    cout << lcm(first_z[0], first_z[1], first_z[2], first_z[3], first_z[4], first_z[5]) << endl;
 
     return 0;
 }
